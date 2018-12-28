@@ -8,7 +8,7 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <PackageTags>aspnetcore;iis</PackageTags>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <PackNativeAssets Condition="'$(OS)' == 'Windows_NT'">true</PackNativeAssets>
+    <PackNativeAssets Condition="'$(OS)' == 'Windows_NT' AND '$(BuildNative)' == 'true'">true</PackNativeAssets>
     <NativeAssetsTargetFramework>netcoreapp3.0</NativeAssetsTargetFramework>
     <DisableFastUpToDateCheck>True</DisableFastUpToDateCheck>
   </PropertyGroup>
@@ -19,7 +19,7 @@
     <Content Include="$(PackageId).targets" PackagePath="build/$(TargetFramework)/" />
   </ItemGroup>
 
-  <Target Name="ValidateNativeComponentsBuilt" AfterTargets="Build" >
+  <Target Name="ValidateNativeComponentsBuilt" AfterTargets="Build" Condition="'$(PackNativeAssets)' == 'true'">
     <Error Text="Required dll from ANCM has not been built. To build ANCM, you must use MSBuild.exe."
         Condition="'$(OS)' == 'Windows_NT' AND !Exists('$(AspNetCoreModuleV2InProcessHandlerDll)')" />
   </Target>
